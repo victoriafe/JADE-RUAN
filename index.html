@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Presentes - Casamento</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #fff8f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                  url('https://images.unsplash.com/photo-1529634899792-3ae3f219b5e4?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
+      color: white;
+      padding: 100px 20px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+    header p {
+      font-size: 20px;
+    }
+    #lista, #painelNoiva {
+      max-width: 1000px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .presente {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .presente:hover {
+      transform: scale(1.02);
+    }
+    .presente h3 {
+      margin: 10px 0;
+      font-size: 22px;
+      color: #b82e5f;
+    }
+    .presente p {
+      margin: 5px 0;
+      font-weight: bold;
+    }
+    .presente a {
+      display: inline-block;
+      margin: 10px 0;
+      color: #b82e5f;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    input, .senha {
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 90%;
+    }
+    button {
+      background: #b82e5f;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 5px;
+    }
+    button:hover {
+      background: #9c234d;
+    }
+    #loginNoiva {
+      text-align: center;
+      padding: 20px;
+      background: #fff0f5;
+      margin: 40px auto;
+      max-width: 400px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #fff0f5;
+      color: #444;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>💍 Nossa Lista de Casamento</h1>
+    <p>Estamos muito felizes em compartilhar esse momento especial com você!</p>
+  </header>
+
+  <main>
+    <!-- Lista pública -->
+    <section id="lista"></section>
+
+    <!-- Login da noiva -->
+    <section id="loginNoiva">
+      <h2>🔒 Acesso da Noiva</h2>
+      <input type="password" id="senhaNoiva" class="senha" placeholder="Digite a senha">
+      <button onclick="entrarNoiva()">Entrar</button>
+    </section>
+
+    <!-- Painel da noiva (escondido até login) -->
+    <section id="painelNoiva" style="display: none;"></section>
+  </main>
+
+  <footer>
+    <p>Obrigado pelo carinho e por fazer parte da nossa história! 💖</p>
+  </footer>
+
+  <script>
+    // 👉 Substitua pela sua URL do Google Apps Script
+    const API_URL = "https://script.google.com/macros/s/AKfycbwekLcUpGGEQvzjmaA_YGRpJJ6_S6SbHfw_-kPcW9YiGb86jAwtJoFnlegYMFTXGcB_4Q/exec";
+    // 👉 Defina a senha da noiva aqui
+    const SENHA_NOIVA = "meuacesso123";
+
+    async function carregarPresentes() {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      
+      // Convidados (só presentes disponíveis)
+      const lista = document.getElementById("lista");
+      lista.innerHTML = "";
+      data.filter(p => p.status === "Disponível").forEach(p => {
+        const div = document.createElement("div");
+        div.className = "presente";
+        div.innerHTML = `
+          <h3>${p.item}</h3>
+          <p>Valor: R$ ${p.valor}</p>
+          <a href="${p.link}" target="_blank">Ver na loja</a><br>
+          <input type="text" id="nome_${p.item}" placeholder="Digite seu nome">
+          <button onclick="escolherPresente('${p.item}')">Escolher presente</button>
+        `;
+        lista.appendChild(div);
+      });
+
+      // Noiva (todos os presentes)
+      const painel = document.getElementById("painelNoiva");
+      painel.innerHTML = "";
+      data.forEach(p => {
+        const div = document.createElement("div");
+        div.className = "presente";
+        div.innerHTML = `
+          <h3>${p.item}</h3>
+          <p>Valor: R$ ${p.valor}</p>
+          <p>Status: ${p.status}</p>
+          <p>Quem escolheu: ${p.quem || "-"}</p>
+          <a href="${p.link}" target="_blank">Ver na loja</a>
+        `;
+        painel.appendChild(div);
+      });
+    }
+
+    async function escolherPresente(item) {
+      const nome = document.getElementById("nome_" + item).value;
+      if (!nome) {
+        alert("Por favor, digite seu nome.");
+        return;
+      }
+
+      await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ item: item, quem: nome }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      alert("Obrigado, " + nome + "! Você escolheu: " + item);
+      carregarPresentes(); // recarregar lista
+    }
+
+    function entrarNoiva() {
+      const senha = document.getElementById("senhaNoiva").value;
+      if (senha === SENHA_NOIVA) {
+        document.getElementById("loginNoiva").style.display = "none";
+        document.getElementById("painelNoiva").style.display = "grid";
+        carregarPresentes(); // atualiza painel
+      } else {
+        alert("Senha incorreta!");
+      }
+    }
+
+    carregarPresentes();
+  </script>
+</body>
+</html>
