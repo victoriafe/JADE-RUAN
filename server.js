@@ -24,18 +24,15 @@ app.get("/presentes", async (req, res) => {
 app.post("/escolher", async (req, res) => {
   try {
     const { item, quem } = req.body;
-
-    const response = await fetch(`${APPS_SCRIPT_URL}?item=${encodeURIComponent(item)}&quem=${encodeURIComponent(quem)}`, {
-      method: "GET"
-    });
-
+    const url = `${APPS_SCRIPT_URL}?item=${encodeURIComponent(item)}&quem=${encodeURIComponent(quem)}`;
+    const response = await fetch(url);
     const data = await response.json();
     res.json(data);
-
   } catch (err) {
     res.status(500).json({ error: "Falha ao escolher presente", details: err.message });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
