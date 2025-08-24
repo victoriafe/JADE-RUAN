@@ -69,5 +69,4 @@ async function carregarPresentes() {
   }
 }
 
-// Espera o DOM carregar antes de chamar
 document.addEventListener("DOMContentLoaded", carregarPresentes);
