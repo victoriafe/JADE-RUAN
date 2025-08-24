@@ -4,8 +4,9 @@ function atualizarContador() {
   const diff = destino - agora;
 
   const contadorEl = document.getElementById("contador");
+  if (!contadorEl) return;
 
-  if (diff < 0) {
+  if (diff <= 0) {
     contadorEl.innerHTML = "Já chegou o grande dia! 🎉";
     return;
   }
@@ -16,9 +17,9 @@ function atualizarContador() {
   const segundos = Math.floor((diff % (1000*60)) / 1000);
 
   contadorEl.innerHTML = `
-    <span>${dias}d</span> 
-    <span>${horas}h</span> 
-    <span>${minutos}m</span> 
+    <span>${dias}d</span>
+    <span>${horas}h</span>
+    <span>${minutos}m</span>
     <span>${segundos}s</span>
   `;
 }
