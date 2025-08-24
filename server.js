@@ -6,14 +6,12 @@ import fetch from "node-fetch";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// URL do seu Apps Script
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwekLcUpGGEQvzjmaA_YGRpJJ6_S6SbHfw_-kPcW9YiGb86jAwtJoFnlegYMFTXGcB_4Q/exec";
 
-// Middlewares
-app.use(cors()); // Permite requisições do GitHub Pages
+
+app.use(cors()); 
 app.use(bodyParser.json());
 
-// GET /presentes
 app.get("/presentes", async (req, res) => {
   try {
     const response = await fetch(APPS_SCRIPT_URL);
@@ -25,7 +23,6 @@ app.get("/presentes", async (req, res) => {
   }
 });
 
-// POST /escolher
 app.post("/escolher", async (req, res) => {
   try {
     const { item, quem } = req.body;
@@ -46,7 +43,6 @@ app.post("/escolher", async (req, res) => {
   }
 });
 
-// Inicia o servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

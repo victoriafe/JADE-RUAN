@@ -23,15 +23,15 @@ header {
 
 .header-content {
   display: flex;
-  flex-direction: column;
-  align-items: center; /* centraliza horizontalmente */
+  flex-direction: column; 
+  align-items: center;    
   justify-content: center;
+  text-align: center;
   background: rgba(255, 255, 255, 0.05);
   padding: 20px 40px;
   border-radius: 30px;
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  text-align: center;
 }
 
 .foto-casal {
@@ -68,14 +68,14 @@ header p {
 
 .bonequinho {
   width: 60px;
-  margin-top: 16px; /* espaço entre texto e imagem */
+  margin-top: 16px; 
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.3);
   background: rgba(255,255,255,0.9);
   padding: 6px;
-  position: static; /* remove absolute */
+  position: static; 
 }
 
 .bonequinho:hover {
