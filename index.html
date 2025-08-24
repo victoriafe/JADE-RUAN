@@ -47,7 +47,7 @@ footer{text-align:center;padding:18px;background:#fff0f5;color:#444;margin-top:2
 </footer>
 
 <script>
-const API_SERVER = "https://jade-ruan.onrender.com"; // servidor Node.js
+const API_SERVER = "https://jade-ruan.onrender.com";
 const SENHA_NOIVA = "meuacesso123";
 
 function makeSafeId(txt){
@@ -97,8 +97,11 @@ async function carregarPresentes(){
                 const inputId = makeSafeId(itemOriginal);
                 const nome = document.getElementById(inputId)?.value?.trim();
                 if(!nome){alert("Por favor, digite seu nome."); return;}
-                ev.currentTarget.disabled = true;
-                ev.currentTarget.textContent = 'Enviando...';
+
+                const btnAtual = ev.currentTarget;
+                btnAtual.disabled = true;
+                btnAtual.textContent = 'Enviando...';
+
                 try{
                     const resp = await fetch(`${API_SERVER}/escolher`, {
                         method: "POST",
@@ -108,13 +111,13 @@ async function carregarPresentes(){
                     const result = await resp.json();
                     if(result.success) alert(`Obrigado, ${nome}! Você escolheu: ${itemOriginal}`);
                     else alert(result.message||"Não foi possível reservar o presente.");
-                    await carregarPresentes();
                 }catch(err){
                     console.error(err);
                     alert("Erro ao reservar. Tente novamente.");
                 }finally{
-                    ev.currentTarget.disabled = false; 
-                    ev.currentTarget.textContent = 'Escolher presente';
+                    btnAtual.disabled = false;
+                    btnAtual.textContent = 'Escolher presente';
+                    await carregarPresentes(); // só aqui depois de atualizar o botão
                 }
             });
         });
