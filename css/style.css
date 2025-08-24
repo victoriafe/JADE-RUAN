@@ -64,6 +64,7 @@ header p {
 .overlay-text {
   position: relative;
   z-index: 2;
+  margin-left: 50px;
 }
 
 .bonequinho {
