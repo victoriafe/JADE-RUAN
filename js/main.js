@@ -17,7 +17,7 @@ async function carregarPresentes() {
 
     lista.innerHTML = "";
 
-    data.filter(p => (p.status||'').toLowerCase() === "disponível").forEach(p => {
+    data.filter(p => (p.status||'').toLowerCase() === "Disponível").forEach(p => {
       const inputId = makeSafeId(p.item);
       const div = document.createElement("div");
       div.className = "presente";
