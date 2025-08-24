@@ -114,7 +114,6 @@
       <button onclick="entrarNoiva()">Entrar</button>
     </section>
 
-    <!-- Painel da noiva (escondido até login) -->
     <section id="painelNoiva" style="display: none;"></section>
   </main>
 
@@ -123,16 +122,13 @@
   </footer>
 
   <script>
-    // 👉 Substitua pela sua URL do Google Apps Script
-    const API_URL = "SUA_URL_DO_APPS_SCRIPT";
-    // 👉 Defina a senha da noiva aqui
+    const API_URL = "https://script.google.com/macros/s/AKfycbwekLcUpGGEQvzjmaA_YGRpJJ6_S6SbHfw_-kPcW9YiGb86jAwtJoFnlegYMFTXGcB_4Q/exec";
     const SENHA_NOIVA = "meuacesso123";
 
     async function carregarPresentes() {
       const res = await fetch(API_URL);
       const data = await res.json();
       
-      // Convidados (só presentes disponíveis)
       const lista = document.getElementById("lista");
       lista.innerHTML = "";
       data.filter(p => p.status === "Disponível").forEach(p => {
@@ -148,7 +144,6 @@
         lista.appendChild(div);
       });
 
-      // Noiva (todos os presentes)
       const painel = document.getElementById("painelNoiva");
       painel.innerHTML = "";
       data.forEach(p => {
@@ -179,7 +174,7 @@
       });
 
       alert("Obrigado, " + nome + "! Você escolheu: " + item);
-      carregarPresentes(); // recarregar lista
+      carregarPresentes();
     }
 
     function entrarNoiva() {
@@ -187,7 +182,7 @@
       if (senha === SENHA_NOIVA) {
         document.getElementById("loginNoiva").style.display = "none";
         document.getElementById("painelNoiva").style.display = "grid";
-        carregarPresentes(); // atualiza painel
+        carregarPresentes(); 
       } else {
         alert("Senha incorreta!");
       }
@@ -197,3 +192,4 @@
   </script>
 </body>
 </html>
+
