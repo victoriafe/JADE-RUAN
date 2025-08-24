@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Página da Noiva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Bem-vinda, meu amor! 💕</h1>
+  </header>
+
+  <main>
+    <p>Essa é a sua página especial.</p>
+
+    <!-- Exemplo de contador -->
+    <div id="contador"></div>
+
+    <a href="index.html" class="voltar">⬅ Voltar</a>
+  </main>
+
+  <footer>
+    <p>Um cantinho só nosso! 💖</p>
+  </footer>
+
+  <script>
+    function atualizarContador() {
+      const destino = new Date("2025-12-23 00:00:00").getTime();
+      const agora = new Date().getTime();
+      const diff = destino - agora;
+
+      if(diff < 0){
+        document.getElementById("contador").innerHTML = "Já chegou o grande dia! 🎉";
+        return;
+      }
+
+      const dias = Math.floor(diff / (1000*60*60*24));
+      const horas = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const minutos = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const segundos = Math.floor((diff % (1000*60)) / 1000);
+
+      document.getElementById("contador").innerHTML =
+        `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+    }
+
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+  </script>
+</body>
+</html>
