@@ -1,18 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const app = express();
-const PORT = 3000; // ou outra porta que quiser
+const PORT = process.env.PORT || 3000;
 
-// Permitir que o frontend no GitHub Pages faça requisições
 app.use(cors());
 app.use(bodyParser.json());
 
-// URL do seu Apps Script
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwekLcUpGGEQvzjmaA_YGRpJJ6_S6SbHfw_-kPcW9YiGb86jAwtJoFnlegYMFTXGcB_4Q/exec";
 
-// Rota GET para buscar presentes
 app.get("/presentes", async (req, res) => {
   try {
     const response = await fetch(APPS_SCRIPT_URL);
@@ -23,15 +21,12 @@ app.get("/presentes", async (req, res) => {
   }
 });
 
-// Rota POST para reservar presente
 app.post("/escolher", async (req, res) => {
   try {
     const { item, quem } = req.body;
 
-    const response = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ item, quem })
+    const response = await fetch(`${APPS_SCRIPT_URL}?item=${encodeURIComponent(item)}&quem=${encodeURIComponent(quem)}`, {
+      method: "GET"
     });
 
     const data = await response.json();

@@ -47,7 +47,7 @@ footer{text-align:center;padding:18px;background:#fff0f5;color:#444;margin-top:2
 </footer>
 
 <script>
-const API_SERVER = "https://jade-ruan.onrender.com"; // coloque aqui o endereço do servidor Node.js
+const API_SERVER = "https://jade-ruan.onrender.com"; // servidor Node.js
 const SENHA_NOIVA = "meuacesso123";
 
 function makeSafeId(txt){
@@ -109,8 +109,10 @@ async function carregarPresentes(){
                     if(result.success) alert(`Obrigado, ${nome}! Você escolheu: ${itemOriginal}`);
                     else alert(result.message||"Não foi possível reservar o presente.");
                     await carregarPresentes();
-                }catch(err){console.error(err); alert("Erro ao reservar. Tente novamente.");}
-                finally{
+                }catch(err){
+                    console.error(err);
+                    alert("Erro ao reservar. Tente novamente.");
+                }finally{
                     ev.currentTarget.disabled = false; 
                     ev.currentTarget.textContent = 'Escolher presente';
                 }
