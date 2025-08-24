@@ -32,7 +32,6 @@ header {
   border-radius: 30px;
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  gap: 20px;
 }
 
 .foto-casal {
@@ -42,7 +41,7 @@ header {
   border-radius: 50%;
   border: 5px solid white;
   box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  margin-bottom: 16px; 
+  margin-bottom: 32px; 
   transition: transform 0.3s;
 }
 
