@@ -1,26 +1,52 @@
-name: Ping Render Server with Logs
+name: Ping Render Server Optimized
 
 on:
   schedule:
     - cron: '*/10 * * * *'  
-  workflow_dispatch:   
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Ping Render Server
         id: ping
         run: |
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://jade-ruan.onrender.com)
-          echo "HTTP Status Code: $RESPONSE"
-          echo "status_code=$RESPONSE" >> $GITHUB_OUTPUT
-
-      - name: Check if server is online
-        run: |
-          if [ "${{ steps.ping.outputs.status_code }}" -eq 200 ]; then
-            echo "Servidor online"
+          if [ "$RESPONSE" -eq 200 ]; then
+            STATUS="online"
           else
-            echo "Servidor offline"
+            STATUS="offline"
           fi
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "$(date '+%Y-%m-%d %H:%M:%S') - Status: $STATUS" >> server-log.txt
+
+      - name: Check if status changed
+        id: check
+        run: |
+          LAST_STATUS=$(tail -n 2 server-log.txt | head -n 1 | awk '{print $NF}')
+          CURRENT_STATUS="${{ steps.ping.outputs.status }}"
+          echo "Last status: $LAST_STATUS, Current status: $CURRENT_STATUS"
+          if [ "$LAST_STATUS" = "$CURRENT_STATUS" ]; then
+            echo "status_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "status_changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit logs if changed
+        if: steps.check.outputs.status_changed == 'true'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add server-log.txt
+          git commit -m "Atualiza log do servidor: ${{ steps.ping.outputs.status }} [$(date '+%Y-%m-%d %H:%M:%S')]"
+          git push
+
+      - name: Print status
+        run: |
+          echo "Servidor está ${{ steps.ping.outputs.status }} ✅"
+
