@@ -1,0 +1,121 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fff8f8;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+              url('https://images.unsplash.com/photo-1529634899792-3ae3f219b5e4?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 18px;
+}
+
+.foto-casal {
+  max-width: 200px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 4px solid white;
+}
+
+#lista, #painelNoiva {
+  max-width: 1000px;
+  margin: 32px auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 0 12px;
+}
+
+.presente {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.presente:hover {
+  transform: scale(1.02);
+}
+
+.presente h3 {
+  margin: 8px 0;
+  font-size: 20px;
+  color: #b82e5f;
+}
+
+.presente p {
+  margin: 4px 0;
+  font-weight: bold;
+}
+
+.presente a {
+  display: inline-block;
+  margin: 8px 0;
+  color: #b82e5f;
+  text-decoration: none;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+input, .senha {
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  background: #b82e5f;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+button:hover {
+  background: #9c234d;
+}
+
+#loginNoiva {
+  text-align: center;
+  padding: 20px;
+  background: #fff0f5;
+  margin: 24px auto;
+  max-width: 420px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.muted {
+  color: #777;
+  font-weight: normal;
+  font-size: 14px;
+}
+
+footer {
+  text-align: center;
+  padding: 18px;
+  background: #fff0f5;
+  color: #444;
+  margin-top: 24px;
+}
