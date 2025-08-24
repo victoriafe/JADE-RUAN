@@ -7,12 +7,14 @@ function makeSafeId(txt) {
 }
 
 async function carregarPresentes() {
+  const lista = document.getElementById("lista");
+  if (!lista) return;
+
   try {
     const res = await fetch(`${API_SERVER}/presentes`);
     if (!res.ok) throw new Error('Falha ao carregar presentes');
     const data = await res.json();
 
-    const lista = document.getElementById("lista");
     lista.innerHTML = "";
 
     // Mostra apenas presentes disponíveis
@@ -30,7 +32,7 @@ async function carregarPresentes() {
         lista.appendChild(div);
       });
 
-    // Botões para escolher presente
+    // Adiciona eventos aos botões
     document.querySelectorAll('.btnEscolher').forEach(btn => {
       btn.addEventListener('click', async ev => {
         const itemOriginal = decodeURIComponent(ev.currentTarget.getAttribute('data-item'));
@@ -67,5 +69,5 @@ async function carregarPresentes() {
   }
 }
 
-// Carrega a lista assim que a página abrir
-carregarPresentes();
+// Espera o DOM carregar antes de chamar
+document.addEventListener("DOMContentLoaded", carregarPresentes);
