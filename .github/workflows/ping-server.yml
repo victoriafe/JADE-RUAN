@@ -20,7 +20,7 @@ jobs:
       - name: Check if server is online
         run: |
           if [ "${{ steps.ping.outputs.status_code }}" -eq 200 ]; then
-            echo "Servidor online ✅"
+            echo "Servidor online"
           else
-            echo "Servidor offline ❌"
+            echo "Servidor offline"
           fi
