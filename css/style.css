@@ -6,44 +6,81 @@ body {
   color: #333;
 }
 
+/* HEADER */
 header {
-  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-              url('https://images.unsplash.com/photo-1529634899792-3ae3f219b5e4?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
-  color: white;
-  padding: 60px 20px;
-  text-align: center;
   position: relative;
+  height: 400px;
+  background: linear-gradient(to bottom, rgba(184,46,95,0.6), rgba(184,46,95,0.3)),
+              url('https://images.unsplash.com/photo-1529634899792-3ae3f219b5e4?auto=format&fit=crop&w=1500&q=80') no-repeat center/cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  overflow: hidden;
 }
 
 .header-content {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 20px;
-  display: inline-block;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px 40px;
+  border-radius: 30px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
 }
 
 .foto-casal {
-  width: 220px;
-  height: 220px;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
   border-radius: 50%;
-  border: 4px solid white;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  border: 5px solid white;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
   margin-bottom: 16px;
+  transition: transform 0.3s;
+}
+
+.foto-casal:hover {
+  transform: scale(1.05);
+}
+
+header h1 {
+  font-size: 36px;
+  margin: 8px 0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+header p {
+  font-size: 18px;
+  margin-bottom: 12px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+
+.overlay-text {
+  position: relative;
+  z-index: 2;
 }
 
 .bonequinho {
-  width: 80px;
-  margin-top: 16px;
+  width: 60px;
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.9);
+  padding: 6px;
 }
 
 .bonequinho:hover {
   transform: scale(1.2);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
 }
 
+/* LISTA DE PRESENTES */
 #lista, #painelNoiva {
   max-width: 1000px;
   margin: 32px auto;
@@ -87,6 +124,7 @@ header {
   word-break: break-word;
 }
 
+/* INPUTS E BOTÕES */
 input, .senha {
   margin: 8px 0;
   padding: 10px;
@@ -111,6 +149,7 @@ button:hover {
   background: #9c234d;
 }
 
+/* LOGIN DA NOIVA */
 #loginNoiva {
   text-align: center;
   padding: 24px;
@@ -127,6 +166,25 @@ button:hover {
   font-size: 14px;
 }
 
+/* CONTADOR */
+.contador {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 24px 0;
+  color: #b82e5f;
+}
+
+.contador span {
+  display: inline-block;
+  margin: 0 8px;
+  background: #ffe5ec;
+  padding: 8px 12px;
+  border-radius: 12px;
+  min-width: 50px;
+}
+
+/* FOOTER */
 footer {
   text-align: center;
   padding: 18px;
@@ -135,6 +193,7 @@ footer {
   margin-top: 24px;
 }
 
+/* BOTÃO VOLTAR */
 .voltar {
   display: inline-block;
   margin-top: 20px;

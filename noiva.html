@@ -7,45 +7,36 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <h1>Bem-vinda, meu amor! 💕</h1>
+  <!-- HEADER -->
+  <header class="header-noiva">
+    <img src="assets/casal.jpg" alt="Foto do casal" class="foto-casal">
+    <div class="overlay-text">
+      <h1>Bem-vinda, meu amor! 💕</h1>
+      <p>Essa é a sua página especial.</p>
+      <a href="index.html" class="voltar">⬅ Voltar para lista</a>
+    </div>
   </header>
 
+  <!-- PAINEL DA NOIVA -->
   <main>
-    <p>Essa é a sua página especial.</p>
+    <section id="loginNoiva">
+      <h2>🔒 Acesso da Noiva</h2>
+      <input type="password" id="senhaNoiva" class="senha" placeholder="Digite a senha">
+      <button id="btnLogin">Entrar</button>
+      <p class="muted">Após entrar, você verá todos os presentes (incluindo os já escolhidos).</p>
+    </section>
 
-    <!-- Exemplo de contador -->
-    <div id="contador"></div>
+    <section id="painelNoiva" style="display:none;"></section>
 
-    <a href="index.html" class="voltar">⬅ Voltar</a>
+    <!-- CONTADOR -->
+    <div id="contador" class="contador"></div>
   </main>
 
   <footer>
     <p>Um cantinho só nosso! 💖</p>
   </footer>
 
-  <script>
-    function atualizarContador() {
-      const destino = new Date("2025-12-23 00:00:00").getTime();
-      const agora = new Date().getTime();
-      const diff = destino - agora;
-
-      if(diff < 0){
-        document.getElementById("contador").innerHTML = "Já chegou o grande dia! 🎉";
-        return;
-      }
-
-      const dias = Math.floor(diff / (1000*60*60*24));
-      const horas = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-      const minutos = Math.floor((diff % (1000*60*60)) / (1000*60));
-      const segundos = Math.floor((diff % (1000*60)) / 1000);
-
-      document.getElementById("contador").innerHTML =
-        `${dias}d ${horas}h ${minutos}m ${segundos}s`;
-    }
-
-    setInterval(atualizarContador, 1000);
-    atualizarContador();
-  </script>
+  <script src="js/noiva.js"></script>
+  <script src="js/contador.js"></script>
 </body>
 </html>
