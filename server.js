@@ -1,5 +1,4 @@
 const express = require("express");
-const fetch = require("node-fetch"); // Para chamar o Apps Script
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
