@@ -7,38 +7,40 @@ function makeSafeId(txt) {
 }
 
 async function carregarPresentes() {
-  const lista = document.getElementById("lista");
-  if (!lista) return; // evita erro se elemento não existir
-
   try {
     const res = await fetch(`${API_SERVER}/presentes`);
-    if (!res.ok) throw new Error("Erro ao carregar presentes");
+    if (!res.ok) throw new Error('Falha ao carregar presentes');
     const data = await res.json();
 
+    const lista = document.getElementById("lista");
     lista.innerHTML = "";
 
-    data.filter(p => (p.status||'').toLowerCase() === "Disponível").forEach(p => {
-      const inputId = makeSafeId(p.item);
-      const div = document.createElement("div");
-      div.className = "presente";
-      div.innerHTML = `
-        <h3>${p.item}</h3>
-        <p>Valor: R$ ${p.valor||"-"}</p>
-        <a href="${p.link}" target="_blank">Ver na loja</a><br>
-        <input type="text" id="${inputId}" placeholder="Seu nome">
-        <button data-item="${encodeURIComponent(p.item)}" class="btnEscolher">Escolher presente</button>
-      `;
-      lista.appendChild(div);
-    });
+    // Mostra apenas presentes disponíveis
+    data.filter(p => (p.status||'').toLowerCase() === "disponível")
+      .forEach(p => {
+        const inputId = makeSafeId(p.item);
+        const div = document.createElement("div");
+        div.className = "presente";
+        div.innerHTML = `
+          <h3>${p.item}</h3>
+          <p>Valor: R$ ${p.valor||"-"}</p>
+          <a href="${p.link}" target="_blank">Ver na loja</a><br>
+          <input type="text" id="${inputId}" placeholder="Seu nome">
+          <button data-item="${encodeURIComponent(p.item)}" class="btnEscolher">Escolher presente</button>`;
+        lista.appendChild(div);
+      });
 
+    // Botões para escolher presente
     document.querySelectorAll('.btnEscolher').forEach(btn => {
       btn.addEventListener('click', async ev => {
-        const itemOriginal = decodeURIComponent(btn.dataset.item);
-        const nome = document.getElementById(makeSafeId(itemOriginal))?.value?.trim();
-        if (!nome) return alert("Por favor, digite seu nome.");
+        const itemOriginal = decodeURIComponent(ev.currentTarget.getAttribute('data-item'));
+        const inputId = makeSafeId(itemOriginal);
+        const nome = document.getElementById(inputId)?.value?.trim();
+        if (!nome) { alert("Por favor, digite seu nome."); return; }
 
-        btn.disabled = true;
-        btn.textContent = "Enviando...";
+        const btnAtual = ev.currentTarget;
+        btnAtual.disabled = true;
+        btnAtual.textContent = 'Enviando...';
 
         try {
           const resp = await fetch(`${API_SERVER}/escolher`, {
@@ -47,11 +49,13 @@ async function carregarPresentes() {
             body: JSON.stringify({item: itemOriginal, quem: nome})
           });
           const result = await resp.json();
-          alert(result.success ? `Obrigado, ${nome}! Você escolheu: ${itemOriginal}` : result.message || "Erro ao reservar.");
-        } catch {
+          if (result.success) alert(`Obrigado, ${nome}! Você escolheu: ${itemOriginal}`);
+          else alert(result.message || "Não foi possível reservar o presente.");
+        } catch (err) {
+          console.error(err);
           alert("Erro ao reservar. Tente novamente.");
         } finally {
-          btn.closest(".presente")?.remove();
+          btnAtual.closest(".presente")?.remove();
           carregarPresentes();
         }
       });
@@ -63,4 +67,5 @@ async function carregarPresentes() {
   }
 }
 
+// Carrega a lista assim que a página abrir
 carregarPresentes();
