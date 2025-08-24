@@ -173,7 +173,7 @@
       }
 
       await fetch(API_URL, {
-        method: "POST",
+        method: "GET",
         body: JSON.stringify({ item: item, quem: nome }),
         headers: { "Content-Type": "application/json" }
       });
@@ -197,3 +197,4 @@
   </script>
 </body>
 </html>
+
