@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Lista de Presentes - Casamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,88 +13,56 @@
       color: #333;
     }
     header {
-      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
                   url('https://images.unsplash.com/photo-1529634899792-3ae3f219b5e4?auto=format&fit=crop&w=1500&q=80') no-repeat center center/cover;
       color: white;
-      padding: 100px 20px;
+      padding: 80px 20px;
       text-align: center;
     }
-    header h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-    }
-    header p {
-      font-size: 20px;
-    }
+    header h1 { font-size: 42px; margin-bottom: 8px; }
+    header p { font-size: 18px; }
     #lista, #painelNoiva {
       max-width: 1000px;
-      margin: 40px auto;
+      margin: 32px auto;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      gap: 16px;
+      padding: 0 12px;
     }
     .presente {
       background: white;
       border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      padding: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       text-align: center;
       transition: transform 0.2s ease;
     }
-    .presente:hover {
-      transform: scale(1.02);
-    }
-    .presente h3 {
-      margin: 10px 0;
-      font-size: 22px;
-      color: #b82e5f;
-    }
-    .presente p {
-      margin: 5px 0;
-      font-weight: bold;
-    }
+    .presente:hover { transform: scale(1.02); }
+    .presente h3 { margin: 8px 0; font-size: 20px; color: #b82e5f; }
+    .presente p { margin: 4px 0; font-weight: bold; }
     .presente a {
-      display: inline-block;
-      margin: 10px 0;
-      color: #b82e5f;
-      text-decoration: none;
-      font-weight: bold;
+      display: inline-block; margin: 8px 0;
+      color: #b82e5f; text-decoration: none; font-weight: bold;
+      word-break: break-word;
     }
     input, .senha {
-      margin: 10px 0;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 90%;
+      margin: 8px 0; padding: 10px; border-radius: 8px;
+      border: 1px solid #ccc; width: 100%; box-sizing: border-box;
     }
     button {
-      background: #b82e5f;
-      color: white;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 5px;
+      background: #b82e5f; color: white; border: none;
+      padding: 10px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 15px; margin-top: 6px;
     }
-    button:hover {
-      background: #9c234d;
-    }
+    button:hover { background: #9c234d; }
     #loginNoiva {
-      text-align: center;
-      padding: 20px;
-      background: #fff0f5;
-      margin: 40px auto;
-      max-width: 400px;
-      border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      text-align: center; padding: 20px; background: #fff0f5;
+      margin: 24px auto; max-width: 420px; border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     }
+    .muted { color: #777; font-weight: normal; font-size: 14px; }
     footer {
-      text-align: center;
-      padding: 20px;
-      background: #fff0f5;
-      color: #444;
-      margin-top: 40px;
+      text-align: center; padding: 18px; background: #fff0f5; color: #444; margin-top: 24px;
     }
   </style>
 </head>
@@ -111,9 +80,11 @@
     <section id="loginNoiva">
       <h2>🔒 Acesso da Noiva</h2>
       <input type="password" id="senhaNoiva" class="senha" placeholder="Digite a senha">
-      <button onclick="entrarNoiva()">Entrar</button>
+      <button id="btnLogin">Entrar</button>
+      <p class="muted">Após entrar, você verá todos os presentes (incluindo os já escolhidos).</p>
     </section>
 
+    <!-- Painel da noiva (escondido até login) -->
     <section id="painelNoiva" style="display: none;"></section>
   </main>
 
@@ -122,59 +93,98 @@
   </footer>
 
   <script>
+    // 👉 Cole aqui a URL /exec do seu Apps Script
     const API_URL = "https://script.google.com/macros/s/AKfycbwekLcUpGGEQvzjmaA_YGRpJJ6_S6SbHfw_-kPcW9YiGb86jAwtJoFnlegYMFTXGcB_4Q/exec";
+    // 👉 Senha simples para a noiva (apenas para esconder/exibir a seção)
     const SENHA_NOIVA = "meuacesso123";
 
-    async function carregarPresentes() {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      
-      const lista = document.getElementById("lista");
-      lista.innerHTML = "";
-      data.filter(p => p.status === "Disponível").forEach(p => {
-        const div = document.createElement("div");
-        div.className = "presente";
-        div.innerHTML = `
-          <h3>${p.item}</h3>
-          <p>Valor: R$ ${p.valor}</p>
-          <a href="${p.link}" target="_blank">Ver na loja</a><br>
-          <input type="text" id="nome_${p.item}" placeholder="Digite seu nome">
-          <button onclick="escolherPresente('${p.item}')">Escolher presente</button>
-        `;
-        lista.appendChild(div);
-      });
-
-      const painel = document.getElementById("painelNoiva");
-      painel.innerHTML = "";
-      data.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "presente";
-        div.innerHTML = `
-          <h3>${p.item}</h3>
-          <p>Valor: R$ ${p.valor}</p>
-          <p>Status: ${p.status}</p>
-          <p>Quem escolheu: ${p.quem || "-"}</p>
-          <a href="${p.link}" target="_blank">Ver na loja</a>
-        `;
-        painel.appendChild(div);
-      });
+    // Cria um ID seguro a partir do nome do item (evita problemas com espaços/acentos)
+    function makeSafeId(txt) {
+      return 'nome_' + String(txt).normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                 .replace(/[^\w\-]+/g, '_');
     }
 
-    async function escolherPresente(item) {
-      const nome = document.getElementById("nome_" + item).value;
-      if (!nome) {
-        alert("Por favor, digite seu nome.");
-        return;
+    async function carregarPresentes() {
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('Falha ao carregar presentes');
+        const data = await res.json();
+
+        // Convidados: apenas "Disponível"
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
+        data
+          .filter(p => String(p.status || '').trim().toLowerCase() === "disponível")
+          .forEach(p => {
+            const inputId = makeSafeId(p.item);
+            const div = document.createElement("div");
+            div.className = "presente";
+            div.innerHTML = `
+              <h3>${p.item}</h3>
+              <p>Valor: R$ ${p.valor || "-"}</p>
+              <a href="${p.link}" target="_blank" rel="noopener noreferrer">Ver na loja</a><br>
+              <input type="text" id="${inputId}" placeholder="Seu nome">
+              <button data-item="${encodeURIComponent(p.item)}" class="btnEscolher">Escolher presente</button>
+            `;
+            lista.appendChild(div);
+          });
+
+        // Noiva: todos
+        const painel = document.getElementById("painelNoiva");
+        painel.innerHTML = "";
+        data.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "presente";
+          div.innerHTML = `
+            <h3>${p.item}</h3>
+            <p>Valor: R$ ${p.valor || "-"}</p>
+            <p>Status: ${p.status || "-"}</p>
+            <p>Quem escolheu: ${p.quem || "-"}</p>
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer">Ver na loja</a>
+          `;
+          painel.appendChild(div);
+        });
+
+         // Liga os botões de escolher
+        document.querySelectorAll('.btnEscolher').forEach(btn => {
+          btn.addEventListener('click', async (ev) => {
+            const itemOriginal = decodeURIComponent(ev.currentTarget.getAttribute('data-item'));
+            const inputId = makeSafeId(itemOriginal);
+            const nome = document.getElementById(inputId)?.value?.trim();
+            if (!nome) { alert("Por favor, digite seu nome."); return; }
+
+            ev.currentTarget.disabled = true;
+            ev.currentTarget.textContent = 'Enviando...';
+
+            try {
+              const resp = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ item: itemOriginal, quem: nome })
+              });
+              if (!resp.ok) throw new Error('Falha no POST');
+              const result = await resp.json();
+
+              if (result.success) {
+                alert(`Obrigado, ${nome}! Você escolheu: ${itemOriginal}`);
+              } else {
+                alert(result.message || "Não foi possível reservar o presente.");
+              }
+              await carregarPresentes();
+            } catch (err) {
+              console.error(err);
+              alert("Erro ao reservar. Tente novamente.");
+            } finally {
+              ev.currentTarget.disabled = false;
+              ev.currentTarget.textContent = 'Escolher presente';
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert("Não foi possível carregar a lista agora.");
       }
-
-      await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ item: item, quem: nome }),
-        headers: { "Content-Type": "application/json" }
-      });
-
-      alert("Obrigado, " + nome + "! Você escolheu: " + item);
-      carregarPresentes();
     }
 
     function entrarNoiva() {
@@ -182,14 +192,15 @@
       if (senha === SENHA_NOIVA) {
         document.getElementById("loginNoiva").style.display = "none";
         document.getElementById("painelNoiva").style.display = "grid";
-        carregarPresentes(); 
       } else {
         alert("Senha incorreta!");
       }
     }
 
+    document.getElementById('btnLogin').addEventListener('click', entrarNoiva);
+
+    // Inicializa
     carregarPresentes();
   </script>
 </body>
 </html>
-
